@@ -15,7 +15,7 @@ const {Schema} = dynamoose;
 const should = require('should');
 
 
-describe.only('Query', function () {
+describe('Query', function () {
   this.timeout(10000);
 
   before((done) => {
