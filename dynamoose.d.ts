@@ -277,6 +277,12 @@ declare module "dynamoose" {
   /**
   * Query
   */
+  export interface QueryFilterExpression {
+    filterExpression: string;
+    expressionAttributeNames: _AWS.DynamoDB.ExpressionAttributeNameMap;
+    expressionAttributeValues: _AWS.DynamoDB.ExpressionAttributeValueMap;
+  }
+  
   type QueryFilter = any;
   export interface QueryInterface<T, R> {
     exec(callback?: (err: Error, result: R) => void): Promise<R>;

@@ -15,7 +15,7 @@ const {Schema} = dynamoose;
 const should = require('should');
 
 
-describe('Query', function () {
+describe.only('Query', function () {
   this.timeout(10000);
 
   before((done) => {
@@ -602,6 +602,25 @@ describe('Query', function () {
     should.exist(error);
     should.exist(error.message);
     error.message.should.eql('Invalid Query state: in() cannot follow not()');
+  });
+
+  it('should use the filterExpression if provided', async () => {
+    const Dog = dynamoose.model('Dog');
+
+    const result = await Dog.query('ownerId').eq(20).filterExpression({
+      'filterExpression': '#breed IN (:b1, :b2)',
+      'expressionAttributeNames': {
+        '#breed': 'breed'
+      },
+      'expressionAttributeValues': {
+        ':b1': {'S': 'Spaniel'},
+        ':b2': {'S': 'Boxer'}
+      }
+    }).exec();
+
+    result.length.should.eql(2);
+    result[0].name.should.eql('Gigi');
+    result[1].name.should.eql('Mimo');
   });
 
   it('Query.count', (done) => {
